@@ -2,16 +2,33 @@ import lark
 from lark import Lark
 
 grammar = """
-    start:     vardecl
-    vardecl:   "var" ID "=" exp ";"
+    start:      decl+
+    decl:       vardecl | fundecl
+    vardecl:    "var" ID "=" exp ";"
+    fundecl:    ID "(" [fargs] ")" [ ":" rettype ] "{" vardecl* stmt+ "}"
+    rettype:    type 
+                | "Void"
+                | "(" [ rettype ","] rettype ")"
+    type:       "Int"
+                | "Bool"
+                | "[" type "]"
+                | ID
+    fargs:      [ fargs ","] ID [ ":" type]
+    stmt:       ID "=" exp ";"
+                | funcall ";"
+                | "return" [ [exp "," ] exp] ";" | "return" "(" [ [exp "," ] exp] ")" ";" 
+
+
     ?exp:       exp OP2 exp_hipr        
                 | exp_hipr
-
     ?exp_hipr:    ID
                 | INT
                 | OP1 exp           
                 | "(" exp ")"       
 
+    
+    funcall:    ID "(" [actargs] ")"
+    actargs:    exp [ "," actargs]
     OP2:        "+" | "-" | "*" | "/" | "%"
                 | "==" | "<" | ">" | "<=" | ">=" | "!="
                 | "&&" | "||"
