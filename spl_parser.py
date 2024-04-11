@@ -13,7 +13,7 @@ grammar = """
                 | "Bool"
                 | "[" type "]"
                 | ID
-    fargs:      [ fargs ","] ID [ ":" type]
+    ?fargs:      [ fargs ","] ID [ ":" type]                                 
     stmt:       "if" "(" exp ")" "{" stmt* "}" [ "else" "{" stmt* "}" ] 
                 | ID "=" exp ";"
                 | funcall ";"

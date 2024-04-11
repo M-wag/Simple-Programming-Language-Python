@@ -1,0 +1,9 @@
+var x = 1;
+var y = False;
+
+id(x) {
+    return(x);
+}
+
+// scope 
+// main
