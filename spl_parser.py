@@ -14,17 +14,20 @@ grammar = """
                 | "[" type "]"
                 | ID
     fargs:      [ fargs ","] ID [ ":" type]
-    stmt:       ID "=" exp ";"
+    stmt:       "if" "(" exp ")" "{" stmt* "}" [ "else" "{" stmt* "}" ] 
+                | ID "=" exp ";"
                 | funcall ";"
-                | "return" [ [exp "," ] exp] ";" | "return" "(" [ [exp "," ] exp] ")" ";" 
-
+                | return_stmt 
+    return_stmt: "return" exp [ "," exp ] ";"
+                | "return" "(" exp [ "," exp ] ")" ";"
 
     ?exp:       exp OP2 exp_hipr        
                 | exp_hipr
-    ?exp_hipr:    ID
+    ?exp_hipr:  funcall
+                | ID
                 | INT
                 | OP1 exp           
-                | "(" exp ")"       
+                | "(" exp ")"
 
     
     funcall:    ID "(" [actargs] ")"
