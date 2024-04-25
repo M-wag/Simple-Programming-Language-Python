@@ -4,22 +4,24 @@ from lark import Lark
 grammar = """
     start:      decl+
     decl:       vardecl | fundecl
-    vardecl:    "var" ID "=" exp ";"
-    fundecl:    ID "(" [fargs] ")" [ ":" rettype ] "{" vardecl* stmt+ "}"
+    vardecl:    ("var" | type) ID "=" exp ";"
+    fundecl:    ID "(" [fargs] ")" [ ":" rettype ] "{" body "}"
+    body:       (vardecl | stmt)* stmt
     rettype:    type 
                 | "Void"
                 | "(" [ rettype ","] rettype ")"
-    type:       "Int"
-                | "Bool"
+    type:       basictype
                 | "[" type "]"
                 | ID
-    ?fargs:      [ fargs ","] ID [ ":" type]                                 
+    basictype:  "Int"                                                           
+                | "Bool"
+    fargs:      [ fargs ","] ID [ ":" type]                                 
     stmt:       "if" "(" exp ")" "{" stmt* "}" [ "else" "{" stmt* "}" ] 
                 | ID "=" exp ";"
                 | funcall ";"
                 | return_stmt 
     return_stmt: "return" exp [ "," exp ] ";"
-                | "return" "(" exp [ "," exp ] ")" ";"
+                | "return" ["(" exp [ "," exp ] ")"] ";"
 
     ?exp:       exp OP2 exp_hipr        
                 | exp_hipr
@@ -37,7 +39,7 @@ grammar = """
                 | "&&" | "||"
 
     OP1:        "!" | "-"
-    INT:        /-?\\d+/
+    INT:        /-?\\d+/                 
     BOOL:       "False" | "True"
     ID:         /[a-zA-Z_][a-zA-Z0-9_]*/
 
