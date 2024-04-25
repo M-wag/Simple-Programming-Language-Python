@@ -6,7 +6,7 @@ grammar = """
     decl:       vardecl | fundecl
     vardecl:    ("var" | type) ID "=" exp ";"
     fundecl:    ID "(" [fargs] ")" [ ":" rettype ] "{" body "}"
-    body:       (vardecl | stmt)* stmt
+    body:       (vardecl | stmt)* stmt (vardecl | stmt)*
     rettype:    type 
                 | "Void"
                 | "(" [ rettype ","] rettype ")"
@@ -16,7 +16,7 @@ grammar = """
     basictype:  "Int"                                                           
                 | "Bool"
     fargs:      [ fargs ","] ID [ ":" type]                                 
-    stmt:       "if" "(" exp ")" "{" stmt* "}" [ "else" "{" stmt* "}" ] 
+    stmt:       "if" "(" exp ")" "{" stmt* "}" [ "else" "{" stmt* "}" ]  -> ifelse
                 | ID "=" exp ";"
                 | funcall ";"
                 | return_stmt 
